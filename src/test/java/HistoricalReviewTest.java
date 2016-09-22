@@ -61,15 +61,15 @@ public class HistoricalReviewTest {
 
         State state = new State(records.get(0));
         assertThat(review.getStateInfo(state),
-                is("cat1 10 9\n"));
+                is("cat1 10 9"));
 
         state.update(records.get(1));
         assertThat(review.getStateInfo(state),
-                is("cat1 12 8\ncat2 2 3\n"));
+                is("cat1 12 8\ncat2 2 3"));
 
         state.update(records.get(2));
         assertThat(review.getStateInfo(state),
-                is("cat1 15 12\ncat2 2 3\n"));
+                is("cat1 15 12\ncat2 2 3"));
     }
 
     @Test
@@ -91,6 +91,6 @@ public class HistoricalReviewTest {
     public void should_print_review_message_for_certain_data()
             throws Exception {
         String msg = review.getSnapshot(validData, id);
-        assertThat(msg, is("cat1 15 12\ncat2 2 3\n"));
+        assertThat(msg, is("cat1 15 12\ncat2 2 3"));
     }
 }

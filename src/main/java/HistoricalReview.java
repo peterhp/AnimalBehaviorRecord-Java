@@ -2,6 +2,7 @@ import data.AnimalState;
 import data.History;
 import data.State;
 import parser.HistoryParser;
+import util.TextFile;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,9 +23,13 @@ public class HistoricalReview {
         });
 
         String msg = "";
-        for (AnimalState aniState : aniStateList) {
-            msg += String.format("%s %d %d\n", aniState.getAnimal(),
+        for (int i = 0; i < aniStateList.size(); ++i) {
+            AnimalState aniState = aniStateList.get(i);
+            msg += String.format("%s %d %d", aniState.getAnimal(),
                     aniState.getPosX(), aniState.getPosY());
+            if (i < aniStateList.size() - 1) {
+                msg += "\n";
+            }
         }
 
         return msg;
@@ -46,6 +51,30 @@ public class HistoricalReview {
         }
 
         return getStateInfo(state);
+    }
+
+    public String readResFile(String res) {
+        TextFile textFile = new TextFile();
+        String path = textFile.getResPath(res);
+        return textFile.readFromTextFile(path);
+    }
+
+    public static void main(String[] args) {
+        HistoricalReview review = new HistoricalReview();
+
+        String invalidData = review.readResFile(
+                "history_invalid.txt");
+        System.out.println(review.getSnapshot(invalidData,
+                "dcfa0c7a-5855-4ed2-bc8c-4accae8bd155"));
+
+        String errorData = review.readResFile(
+                "history_error.txt");
+        System.out.println(review.getSnapshot(errorData,
+                "dcfa0c7a-5855-4ed2-bc8c-4accae8bd155"));
+
+        String data = review.readResFile("history.txt");
+        System.out.println(review.getSnapshot(data,
+                "dcfa0c7a-5855-4ed2-bc8c-4accae8bd155"));
     }
 
 }
