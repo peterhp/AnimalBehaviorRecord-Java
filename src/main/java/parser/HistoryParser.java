@@ -1,6 +1,9 @@
 package parser;
 
-import java.util.ArrayList;
+import data.Record;
+import exception.InvalidRecordFormatException;
+
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -8,11 +11,11 @@ import java.util.List;
  */
 public class HistoryParser {
 
-    public List<String> splitToRecord(String history) {
+    public List<String> splitToRecordString(String history) {
         history = history.replace("\r\n", "\n");
         history = history.replace("\r", "\n");
 
-        List<String> recordList = new ArrayList<>();
+        List<String> recordList = new LinkedList<>();
 
         String[] records = history.split("\n\n");
         for (String record : records) {
@@ -23,6 +26,20 @@ public class HistoryParser {
         }
 
         return recordList;
+    }
+
+    public List<Record> parseToRecord(String history)
+            throws InvalidRecordFormatException {
+        List<Record> records = new LinkedList<>();
+
+        List<String> recordInfos = splitToRecordString(history);
+        RecordParser parser = new RecordParser();
+        for (String recordInfo : recordInfos) {
+            Record record = parser.parse(recordInfo);
+            records.add(record);
+        }
+
+        return records;
     }
 
 }
