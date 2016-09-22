@@ -13,9 +13,9 @@ import static org.junit.Assert.*;
  */
 public class HistoryParserTest {
 
-    HistoryParser parser = new HistoryParser();
-    String history;
-    String[] records;
+    private HistoryParser parser = new HistoryParser();
+    private String history;
+    private String[] records;
 
     @Before
     public void setUp() throws Exception {
