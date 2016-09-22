@@ -1,6 +1,8 @@
 package parser;
 
+import data.History;
 import data.Record;
+import exception.ConflictDataException;
 import exception.InvalidRecordFormatException;
 
 import java.util.LinkedList;
@@ -42,4 +44,24 @@ public class HistoryParser {
         return records;
     }
 
+    public History parse(String histData) throws Exception {
+        List<Record> records;
+        try {
+            records = parseToRecord(histData);
+        } catch (InvalidRecordFormatException e) {
+            throw new Exception("Invalid format.");
+        }
+
+        History history = new History();
+        for (Record record : records) {
+            try {
+                history.add(record);
+            } catch (ConflictDataException e) {
+                throw new Exception("Conflict found at " +
+                        record.getId() + ".");
+            }
+        }
+
+        return history;
+    }
 }
