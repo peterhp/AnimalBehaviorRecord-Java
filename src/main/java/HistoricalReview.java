@@ -13,6 +13,38 @@ import java.util.List;
  */
 public class HistoricalReview {
 
+    History history = null;
+
+    public void constructHistory(String historyData)
+            throws Exception {
+        HistoryParser parser = new HistoryParser();
+        history = parser.parse(historyData);
+    }
+
+    public String lookupState(String id) {
+        if (null == history) {
+            return "No history data.";
+        }
+
+        State state = history.getState(id);
+        if (null == state) {
+            return "No record at " + id + ".";
+        }
+
+        return getStateInfo(state);
+    }
+
+    public static String getSnapshot(String historyData, String id) {
+        HistoricalReview review = new HistoricalReview();
+        try {
+            review.constructHistory(historyData);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+        return review.lookupState(id);
+    }
+
     public String getStateInfo(State state) {
         List<AnimalState> aniStateList = state.getAllAniState();
         Collections.sort(aniStateList, new Comparator<AnimalState>() {
@@ -33,24 +65,6 @@ public class HistoricalReview {
         }
 
         return msg;
-    }
-
-    public String getSnapshot(String historyData, String id) {
-        HistoryParser parser = new HistoryParser();
-        History history;
-
-        try {
-            history = parser.parse(historyData);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-
-        State state = history.getState(id);
-        if (null == state) {
-            return "No record at " + id + ".";
-        }
-
-        return getStateInfo(state);
     }
 
     public String readResFile(String res) {
